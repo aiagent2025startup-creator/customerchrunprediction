@@ -208,6 +208,31 @@ select {
     transition: all 0.3s ease;
 }
 
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M1 4l5 4 5-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    padding-right: 2.5rem;
+}
+
+select option {
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 0.5rem;
+}
+
+select option:hover {
+    background: linear-gradient(#818cf8, #818cf8);
+    background-color: #818cf8;
+}
+
+select option:checked {
+    background: linear-gradient(#818cf8, #818cf8);
+    background-color: #818cf8;
+    color: #ffffff;
+}
+
 input::placeholder {
     color: rgba(255, 255, 255, 0.4);
 }
