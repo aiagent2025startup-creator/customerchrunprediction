@@ -1,0 +1,137 @@
+{
+    "info": {
+        "_postman_id": "churn-prediction-api",
+        "name": "Churn Prediction API",
+        "description": "API for predicting customer churn using LightGBM",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Health Check",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8000/health",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "health"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Single Prediction (Low Risk)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"Call_Failure\": 8,\n  \"Complains\": 0,\n  \"Subscription_Length\": 38,\n  \"Charge_Amount\": 0,\n  \"Seconds_of_Use\": 4370,\n  \"Frequency_of_use\": 71,\n  \"Frequency_of_SMS\": 5,\n  \"Distinct_Called_Numbers\": 17,\n  \"Age_Group\": 3,\n  \"Tariff_Plan\": 1,\n  \"Status\": 1,\n  \"Age\": 30,\n  \"Customer_Value\": 197.64\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8000/predict",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "predict"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Single Prediction (High Risk)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"Call_Failure\": 20,\n  \"Complains\": 1,\n  \"Subscription_Length\": 2,\n  \"Charge_Amount\": 0,\n  \"Seconds_of_Use\": 100,\n  \"Frequency_of_use\": 5,\n  \"Frequency_of_SMS\": 0,\n  \"Distinct_Called_Numbers\": 2,\n  \"Age_Group\": 2,\n  \"Tariff_Plan\": 1,\n  \"Status\": 1,\n  \"Age\": 25,\n  \"Customer_Value\": 10.0\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8000/predict",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "predict"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Batch Prediction",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"customers\": [\n    {\n      \"Call_Failure\": 8,\n      \"Complains\": 0,\n      \"Subscription_Length\": 38,\n      \"Charge_Amount\": 0,\n      \"Seconds_of_Use\": 4370,\n      \"Frequency_of_use\": 71,\n      \"Frequency_of_SMS\": 5,\n      \"Distinct_Called_Numbers\": 17,\n      \"Age_Group\": 3,\n      \"Tariff_Plan\": 1,\n      \"Status\": 1,\n      \"Age\": 30,\n      \"Customer_Value\": 197.64\n    },\n    {\n      \"Call_Failure\": 20,\n      \"Complains\": 1,\n      \"Subscription_Length\": 2,\n      \"Charge_Amount\": 0,\n      \"Seconds_of_Use\": 100,\n      \"Frequency_of_use\": 5,\n      \"Frequency_of_SMS\": 0,\n      \"Distinct_Called_Numbers\": 2,\n      \"Age_Group\": 2,\n      \"Tariff_Plan\": 1,\n      \"Status\": 1,\n      \"Age\": 25,\n      \"Customer_Value\": 10.0\n    }\n  ]\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8000/predict/batch",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "predict",
+                        "batch"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Model Info",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8000/model/info",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "model",
+                        "info"
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}

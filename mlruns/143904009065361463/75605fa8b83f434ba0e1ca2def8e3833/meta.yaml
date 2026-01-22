@@ -1,0 +1,15 @@
+artifact_uri: file:///home/thamaraikannan/Desktop/project1/mlruns/143904009065361463/75605fa8b83f434ba0e1ca2def8e3833/artifacts
+end_time: 1769063314750
+entry_point_name: ''
+experiment_id: '143904009065361463'
+lifecycle_stage: active
+run_id: 75605fa8b83f434ba0e1ca2def8e3833
+run_name: sincere-yak-816
+run_uuid: 75605fa8b83f434ba0e1ca2def8e3833
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1769062568143
+status: 3
+tags: []
+user_id: thamaraikannan

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Churn Prediction AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-chart-line"></i>
+                <h1>ChurnGuard AI</h1>
+            </div>
+            <p class="subtitle">Advanced Customer Retention Intelligence</p>
+        </header>
+
+        <main>
+            <div class="glass-card form-section">
+                <h2><i class="fa-solid fa-user-gear"></i> Customer Profile</h2>
+                <form id="predictionForm">
+                    <div class="grid-container">
+                        <!-- Personal Info -->
+                        <div class="input-group">
+                            <label for="Age"><i class="fa-solid fa-cake-candles"></i> Age</label>
+                            <input type="number" id="Age" name="Age" min="0" max="120" required placeholder="e.g. 30">
+                        </div>
+                        <div class="input-group">
+                            <label for="Age_Group"><i class="fa-solid fa-users"></i> Age Group (1-5)</label>
+                            <select id="Age_Group" name="Age_Group" required>
+                                <option value="1">1 (Youngest)</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5 (Oldest)</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Usage Metrics -->
+                        <div class="input-group">
+                            <label for="Subscription_Length"><i class="fa-solid fa-calendar-check"></i> Subscription (Months)</label>
+                            <input type="number" id="Subscription_Length" name="Subscription_Length" min="0" required placeholder="e.g. 38">
+                        </div>
+                        <div class="input-group">
+                            <label for="Seconds_of_Use"><i class="fa-solid fa-clock"></i> Seconds of Use</label>
+                            <input type="number" id="Seconds_of_Use" name="Seconds_of_Use" min="0" required placeholder="e.g. 4370">
+                        </div>
+                        <div class="input-group">
+                            <label for="Frequency_of_use"><i class="fa-solid fa-phone-volume"></i> Frequency of Use</label>
+                            <input type="number" id="Frequency_of_use" name="Frequency_of_use" min="0" required placeholder="e.g. 71">
+                        </div>
+                        <div class="input-group">
+                            <label for="Frequency_of_SMS"><i class="fa-solid fa-comment-sms"></i> Frequency of SMS</label>
+                            <input type="number" id="Frequency_of_SMS" name="Frequency_of_SMS" min="0" required placeholder="e.g. 5">
+                        </div>
+                        <div class="input-group">
+                            <label for="Distinct_Called_Numbers"><i class="fa-solid fa-address-book"></i> Distinct Called Numbers</label>
+                            <input type="number" id="Distinct_Called_Numbers" name="Distinct_Called_Numbers" min="0" required placeholder="e.g. 17">
+                        </div>
+                        <div class="input-group">
+                            <label for="Call_Failure"><i class="fa-solid fa-phone-slash"></i> Call Failures</label>
+                            <input type="number" id="Call_Failure" name="Call_Failure" min="0" required placeholder="e.g. 8">
+                        </div>
+
+                        <!-- Account Info -->
+                        <div class="input-group">
+                            <label for="Charge_Amount"><i class="fa-solid fa-file-invoice-dollar"></i> Charge Amount (0-9)</label>
+                            <input type="number" id="Charge_Amount" name="Charge_Amount" min="0" max="9" required placeholder="e.g. 0">
+                        </div>
+                        <div class="input-group">
+                            <label for="Customer_Value"><i class="fa-solid fa-star"></i> Customer Value</label>
+                            <input type="number" id="Customer_Value" name="Customer_Value" min="0" step="0.01" required placeholder="e.g. 197.64">
+                        </div>
+                        <div class="input-group">
+                            <label for="Tariff_Plan"><i class="fa-solid fa-sim-card"></i> Tariff Plan</label>
+                            <select id="Tariff_Plan" name="Tariff_Plan" required>
+                                <option value="1">Pay as you go</option>
+                                <option value="2">Contractual</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="Status"><i class="fa-solid fa-toggle-on"></i> Status</label>
+                            <select id="Status" name="Status" required>
+                                <option value="1">Active</option>
+                                <option value="2">Non-active</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="Complains"><i class="fa-solid fa-circle-exclamation"></i> Complains</label>
+                            <select id="Complains" name="Complains" required>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="predictBtn">
+                        <span class="btn-text">Analyze Risk</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <div class="loader" id="btnLoader"></div>
+                    </button>
+                </form>
+            </div>
+
+            <div class="glass-card result-section hidden" id="resultSection">
+                <h2><i class="fa-solid fa-square-poll-vertical"></i> Analysis Result</h2>
+                
+                <div class="result-card" id="resultCard">
+                    <div class="risk-indicator">
+                        <div class="risk-circle" id="riskCircle">
+                            <span id="riskScore">0%</span>
+                        </div>
+                        <p class="risk-label" id="riskLabel">Low Risk</p>
+                    </div>
+                    
+                    <div class="result-details">
+                        <div class="detail-item">
+                            <span class="label">Prediction:</span>
+                            <span class="value" id="predictionText">Non-Churn</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Confidence:</span>
+                            <span class="value" id="confidenceText">98.5%</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Processing Time:</span>
+                            <span class="value" id="latencyText">12ms</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-recommendation" id="recommendation">
+                    <h3><i class="fa-solid fa-lightbulb"></i> Recommendation</h3>
+                    <p id="recommendationText">Customer is satisfied. No immediate action required.</p>
+                </div>
+                
+                <button class="reset-btn" id="resetBtn">Analyze Another Customer</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 ChurnGuard AI. Powered by LightGBM & FastAPI.</p>
+            <div class="status-indicator">
+                <span class="status-dot"></span>
+                <span id="apiStatus">System Online</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

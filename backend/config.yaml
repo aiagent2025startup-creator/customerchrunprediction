@@ -1,0 +1,54 @@
+data:
+  uci_id: 563
+  test_size: 0.2
+  random_state: 42
+  target_column: "Churn"
+
+feature_engineering:
+  scaling: "standard"  # standard, minmax, or none
+  handle_imbalance: "class_weight"  # class_weight, smote, or none
+  interaction_features: true
+  aggregation_features: true
+
+models:
+  lightgbm:
+    n_estimators: 200
+    learning_rate: 0.1
+    max_depth: 6
+    random_state: 42
+    verbose: -1
+    class_weight: "balanced"
+  
+  xgboost:
+    n_estimators: 200
+    learning_rate: 0.1
+    max_depth: 6
+    random_state: 42
+    verbosity: 0
+    scale_pos_weight: 5 # Approximate ratio for imbalance
+  
+  catboost:
+    iterations: 200
+    learning_rate: 0.1
+    depth: 6
+    random_seed: 42
+    verbose: 0
+    auto_class_weights: "Balanced"
+  
+  random_forest:
+    n_estimators: 200
+    max_depth: 10
+    random_state: 42
+    class_weight: "balanced"
+
+training:
+  cv_folds: 10
+  scoring: "f1" # f1, recall, accuracy
+  early_stopping_rounds: 20
+
+paths:
+  artifacts_dir: "backend/artifacts"
+  model_path: "backend/artifacts/churn_model.pkl"
+  feature_names_path: "backend/artifacts/feature_names.pkl"
+  metadata_path: "backend/artifacts/model_metadata.pkl"
+  metrics_path: "backend/artifacts/metrics.json"
