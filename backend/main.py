@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -302,6 +302,86 @@ async def predict_batch(request: BatchPredictionRequest):
     except Exception as e:
         logger.error(f"Batch prediction error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/predict/batch/csv", response_model=BatchPredictionResponse, tags=["Prediction"])
+async def predict_batch_csv(file: UploadFile = File(...)):
+    if model is None:
+        raise HTTPException(status_code=503, detail="Model not loaded")
+    
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="Only CSV files are supported")
+    
+    start_time = time.time()
+    try:
+        # Read CSV
+        df = pd.read_csv(file.file)
+        
+        # Mapping for column names if they differ from internal names
+        mapping = {
+            "Call_Failure": "Call  Failure",
+            "Complains": "Complains",
+            "Subscription_Length": "Subscription  Length",
+            "Charge_Amount": "Charge  Amount",
+            "Seconds_of_Use": "Seconds of Use",
+            "Frequency_of_use": "Frequency of use",
+            "Frequency_of_SMS": "Frequency of SMS",
+            "Distinct_Called_Numbers": "Distinct Called Numbers",
+            "Age_Group": "Age Group",
+            "Tariff_Plan": "Tariff Plan",
+            "Status": "Status",
+            "Age": "Age",
+            "Customer_Value": "Customer Value"
+        }
+        
+        # Rename columns based on mapping
+        # First, handle cases where CSV might already have the mapped names
+        # or needs to be mapped from the Pydantic field names
+        df_mapped = df.rename(columns=mapping)
+        
+        # Preprocess data
+        processed_df = preprocess_data(df_mapped)
+        
+        # Ensure all required features are present
+        if feature_names:
+            for col in feature_names:
+                if col not in processed_df.columns:
+                    processed_df[col] = 0
+            processed_df = processed_df[feature_names]
+            
+        # Predictions
+        predictions = model.predict(processed_df)
+        probabilities = model.predict_proba(processed_df)[:, 1]
+        
+        response_list = []
+        high_risk_count = 0
+        
+        for pred, prob in zip(predictions, probabilities):
+            risk = get_risk_level(prob)
+            if risk == "High":
+                high_risk_count += 1
+                
+            response_list.append(PredictionResponse(
+                churn_prediction=int(pred),
+                churn_probability=float(prob),
+                risk_level=risk,
+                confidence=float(prob if pred == 1 else 1 - prob),
+                top_risk_factors=[]
+            ))
+            
+        processing_time = (time.time() - start_time) * 1000
+        
+        return BatchPredictionResponse(
+            predictions=response_list,
+            total_customers=len(df),
+            high_risk_count=high_risk_count,
+            processing_time_ms=processing_time
+        )
+        
+    except Exception as e:
+        logger.error(f"CSV Batch prediction error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error processing CSV: {str(e)}")
+    finally:
+        file.file.close()
 
 @app.get("/monitoring", tags=["Monitoring"])
 async def monitoring_status():

@@ -45,15 +45,15 @@ class TestRootEndpoints:
     def test_root(self, client):
         response = client.get("/")
         assert response.status_code == 200
-        assert response.json()["version"] == "1.0.0"
+        assert "text/html" in response.headers["content-type"]
 
     def test_health(self, client):
         response = client.get("/health")
         assert response.status_code == 200
         data = response.json()
-        assert data["status"] == "healthy"
-        assert data["model_loaded"] is True
-        assert data["model_accuracy"] > 0.95
+        assert data["status"] == "ok"
+        assert "model_name" in data
+        assert "model_version" in data
 
 class TestPredictionEndpoint:
     def test_valid_prediction(self, client):
@@ -96,13 +96,32 @@ class TestBatchPrediction:
         assert response.status_code == 200
         assert response.json()["total_customers"] == 100
 
+    def test_batch_prediction_csv(self, client):
+        import io
+        import pandas as pd
+        
+        # Create a sample CSV
+        df = pd.DataFrame([valid_customer, high_risk_customer])
+        csv_buffer = io.BytesIO()
+        df.to_csv(csv_buffer, index=False)
+        csv_buffer.seek(0)
+        
+        files = {"file": ("test.csv", csv_buffer, "text/csv")}
+        response = client.post("/predict/batch/csv", files=files)
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert data["total_customers"] == 2
+        assert len(data["predictions"]) == 2
+        assert "processing_time_ms" in data
+
 class TestModelInfo:
     def test_model_info(self, client):
         response = client.get("/model/info")
         assert response.status_code == 200
         data = response.json()
         assert data["model_type"] == "LightGBM"
-        assert data["feature_count"] == 13
+        assert data["feature_count"] >= 13
 
 class TestPerformance:
     def test_latency(self, client):

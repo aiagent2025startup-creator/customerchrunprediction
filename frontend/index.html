@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
     <div class="background-blobs">
         <div class="blob blob-1"></div>
@@ -35,73 +37,114 @@
                         <div class="input-group">
                             <label for="Age"><i class="fa-solid fa-cake-candles"></i> Age</label>
                             <input type="number" id="Age" name="Age" min="0" max="120" required placeholder="e.g. 30">
+                            <span class="error-text" id="Age_error"></span>
                         </div>
                         <div class="input-group">
-                            <label for="Age_Group"><i class="fa-solid fa-users"></i> Age Group (1-5)</label>
+                            <label for="Age_Group"><i class="fa-solid fa-users"></i> Age Group</label>
                             <select id="Age_Group" name="Age_Group" required>
-                                <option value="1">1 (Youngest)</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5 (Oldest)</option>
+                                <option value="" disabled selected>Select Age Group...</option>
+                                <option value="1">1 (0–18)</option>
+                                <option value="2">2 (19–25)</option>
+                                <option value="3">3 (26–35)</option>
+                                <option value="4">4 (36–50)</option>
+                                <option value="5">5 (50+)</option>
                             </select>
+                            <span class="error-text" id="Age_Group_error"></span>
                         </div>
-                        
+
                         <!-- Usage Metrics -->
                         <div class="input-group">
-                            <label for="Subscription_Length"><i class="fa-solid fa-calendar-check"></i> Subscription (Months)</label>
-                            <input type="number" id="Subscription_Length" name="Subscription_Length" min="0" required placeholder="e.g. 38">
+                            <label for="Subscription_Length"><i class="fa-solid fa-calendar-check"></i> Subscription
+                                (Months)</label>
+                            <input type="number" id="Subscription_Length" name="Subscription_Length" min="0" required
+                                placeholder="e.g. 38">
+                            <span class="error-text" id="Subscription_Length_error"></span>
                         </div>
                         <div class="input-group">
                             <label for="Seconds_of_Use"><i class="fa-solid fa-clock"></i> Seconds of Use</label>
-                            <input type="number" id="Seconds_of_Use" name="Seconds_of_Use" min="0" required placeholder="e.g. 4370">
+                            <input type="number" id="Seconds_of_Use" name="Seconds_of_Use" min="0" required
+                                placeholder="e.g. 4370">
+                            <span class="error-text" id="Seconds_of_Use_error"></span>
                         </div>
                         <div class="input-group">
-                            <label for="Frequency_of_use"><i class="fa-solid fa-phone-volume"></i> Frequency of Use</label>
-                            <input type="number" id="Frequency_of_use" name="Frequency_of_use" min="0" required placeholder="e.g. 71">
+                            <label for="Frequency_of_use"><i class="fa-solid fa-phone-volume"></i> Frequency of
+                                Use</label>
+                            <input type="number" id="Frequency_of_use" name="Frequency_of_use" min="0" required
+                                placeholder="e.g. 71">
+                            <span class="error-text" id="Frequency_of_use_error"></span>
                         </div>
                         <div class="input-group">
-                            <label for="Frequency_of_SMS"><i class="fa-solid fa-comment-sms"></i> Frequency of SMS</label>
-                            <input type="number" id="Frequency_of_SMS" name="Frequency_of_SMS" min="0" required placeholder="e.g. 5">
+                            <label for="Frequency_of_SMS"><i class="fa-solid fa-comment-sms"></i> Frequency of
+                                SMS</label>
+                            <input type="number" id="Frequency_of_SMS" name="Frequency_of_SMS" min="0" required
+                                placeholder="e.g. 5">
+                            <span class="error-text" id="Frequency_of_SMS_error"></span>
                         </div>
                         <div class="input-group">
-                            <label for="Distinct_Called_Numbers"><i class="fa-solid fa-address-book"></i> Distinct Called Numbers</label>
-                            <input type="number" id="Distinct_Called_Numbers" name="Distinct_Called_Numbers" min="0" required placeholder="e.g. 17">
+                            <label for="Distinct_Called_Numbers"><i class="fa-solid fa-address-book"></i> Distinct
+                                Called Numbers</label>
+                            <input type="number" id="Distinct_Called_Numbers" name="Distinct_Called_Numbers" min="0"
+                                required placeholder="e.g. 17">
+                            <span class="error-text" id="Distinct_Called_Numbers_error"></span>
                         </div>
                         <div class="input-group">
                             <label for="Call_Failure"><i class="fa-solid fa-phone-slash"></i> Call Failures</label>
-                            <input type="number" id="Call_Failure" name="Call_Failure" min="0" required placeholder="e.g. 8">
+                            <input type="number" id="Call_Failure" name="Call_Failure" min="0" required
+                                placeholder="e.g. 8">
+                            <span class="error-text" id="Call_Failure_error"></span>
                         </div>
 
                         <!-- Account Info -->
                         <div class="input-group">
-                            <label for="Charge_Amount"><i class="fa-solid fa-file-invoice-dollar"></i> Charge Amount (0-9)</label>
-                            <input type="number" id="Charge_Amount" name="Charge_Amount" min="0" max="9" required placeholder="e.g. 0">
+                            <label for="Charge_Amount"><i class="fa-solid fa-file-invoice-dollar"></i> Charge
+                                Amount</label>
+                            <select id="Charge_Amount" name="Charge_Amount" required>
+                                <option value="" disabled selected>Select Charge Amount...</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                            </select>
+                            <span class="error-text" id="Charge_Amount_error"></span>
                         </div>
                         <div class="input-group">
                             <label for="Customer_Value"><i class="fa-solid fa-star"></i> Customer Value</label>
-                            <input type="number" id="Customer_Value" name="Customer_Value" min="0" step="0.01" required placeholder="e.g. 197.64">
+                            <input type="number" id="Customer_Value" name="Customer_Value" min="0" step="0.01" required
+                                placeholder="e.g. 197.64">
+                            <span class="error-text" id="Customer_Value_error"></span>
                         </div>
                         <div class="input-group">
                             <label for="Tariff_Plan"><i class="fa-solid fa-sim-card"></i> Tariff Plan</label>
                             <select id="Tariff_Plan" name="Tariff_Plan" required>
+                                <option value="" disabled selected>Select Tariff Plan...</option>
                                 <option value="1">Pay as you go</option>
                                 <option value="2">Contractual</option>
                             </select>
+                            <span class="error-text" id="Tariff_Plan_error"></span>
                         </div>
                         <div class="input-group">
                             <label for="Status"><i class="fa-solid fa-toggle-on"></i> Status</label>
                             <select id="Status" name="Status" required>
+                                <option value="" disabled selected>Select Status...</option>
                                 <option value="1">Active</option>
                                 <option value="2">Non-active</option>
                             </select>
+                            <span class="error-text" id="Status_error"></span>
                         </div>
                         <div class="input-group">
                             <label for="Complains"><i class="fa-solid fa-circle-exclamation"></i> Complains</label>
                             <select id="Complains" name="Complains" required>
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
+                                <option value="" disabled selected>Select Complaint Status...</option>
+                                <option value="0">No Complaint</option>
+                                <option value="1">Complaint Raised</option>
                             </select>
+                            <span class="error-text" id="Complains_error"></span>
                         </div>
                     </div>
 
@@ -115,7 +158,7 @@
 
             <div class="glass-card result-section hidden" id="resultSection">
                 <h2><i class="fa-solid fa-square-poll-vertical"></i> Analysis Result</h2>
-                
+
                 <div class="result-card" id="resultCard">
                     <div class="risk-indicator">
                         <div class="risk-circle" id="riskCircle">
@@ -123,7 +166,7 @@
                         </div>
                         <p class="risk-label" id="riskLabel">Low Risk</p>
                     </div>
-                    
+
                     <div class="result-details">
                         <div class="detail-item">
                             <span class="label">Prediction:</span>
@@ -144,7 +187,7 @@
                     <h3><i class="fa-solid fa-lightbulb"></i> Recommendation</h3>
                     <p id="recommendationText">Customer is satisfied. No immediate action required.</p>
                 </div>
-                
+
                 <button class="reset-btn" id="resetBtn">Analyze Another Customer</button>
             </div>
         </main>
@@ -158,6 +201,7 @@
         </footer>
     </div>
 
-    <script src="script.js"></script>
+    <script src="/static/script.js"></script>
 </body>
+
 </html>

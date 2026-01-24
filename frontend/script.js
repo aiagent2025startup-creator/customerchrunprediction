@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8000';
+const API_URL = window.location.origin;
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('predictionForm');
@@ -14,8 +14,77 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check API Health
     checkHealth();
 
+    // Validation Logic
+    const inputs = form.querySelectorAll('input, select');
+    const validateField = (field, showErrors = true) => {
+        const errorSpan = document.getElementById(`${field.id}_error`);
+        if (!errorSpan) return true;
+
+        let isValid = true;
+        let message = '';
+
+        if (field.required && (!field.value || field.value === '')) {
+            isValid = false;
+            message = 'This field is required';
+        } else if (field.type === 'number') {
+            const val = parseFloat(field.value);
+            const min = parseFloat(field.getAttribute('min'));
+            const max = parseFloat(field.getAttribute('max'));
+            if (!isNaN(min) && val < min) {
+                isValid = false;
+                message = `Value must be at least ${min}`;
+            } else if (!isNaN(max) && val > max) {
+                isValid = false;
+                message = `Value must be at most ${max}`;
+            }
+        }
+
+        const isTouched = field.dataset.touched === 'true';
+        if (showErrors && isTouched) {
+            errorSpan.textContent = isValid ? '' : message;
+            field.style.borderColor = isValid ? '' : '#dc2626';
+        }
+        return isValid;
+    };
+
+    const validateForm = (showErrors = true) => {
+        let isFormValid = true;
+        inputs.forEach(input => {
+            if (!validateField(input, showErrors)) {
+                isFormValid = false;
+            }
+        });
+        predictBtn.disabled = !isFormValid;
+        return isFormValid;
+    };
+
+    // Initial validation (silent)
+    validateForm(false);
+
+    // Add listeners for real-time validation
+    inputs.forEach(input => {
+        input.dataset.touched = 'false';
+
+        input.addEventListener('input', () => {
+            input.dataset.touched = 'true';
+            validateForm(true);
+        });
+
+        input.addEventListener('change', () => {
+            input.dataset.touched = 'true';
+            validateForm(true);
+        });
+
+        input.addEventListener('blur', () => {
+            input.dataset.touched = 'true';
+            validateField(input, true);
+        });
+    });
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        if (!validateForm()) return;
 
         // Show loading state
         setLoading(true);
@@ -26,11 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Convert FormData to JSON object with correct types
         for (let [key, value] of formData.entries()) {
-            // Convert numbers
-            if (!isNaN(value) && value !== '') {
+            // Convert numbers and enums to integers
+            if (value !== '') {
                 data[key] = parseFloat(value);
-            } else {
-                data[key] = value;
             }
         }
 
