@@ -213,4 +213,103 @@ document.addEventListener('DOMContentLoaded', () => {
         resultSection.classList.remove('hidden');
         resultSection.scrollIntoView({ behavior: 'smooth' });
     }
+
+    // Initialize Dashboard Charts
+    function initDashboard() {
+        const chartOptions = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#cbd5e1',
+                        padding: 20,
+                        font: {
+                            family: "'Outfit', sans-serif",
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    titleColor: '#fff',
+                    bodyColor: '#cbd5e1',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 1,
+                    padding: 12,
+                    displayColors: true,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed !== undefined) {
+                                label += context.parsed + '%';
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        };
+
+        // 1. Churn Risk Distribution
+        new Chart(document.getElementById('churnDistributionChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Low Risk', 'Medium Risk', 'High Risk'],
+                datasets: [{
+                    data: [65, 20, 15],
+                    backgroundColor: ['#34d399', '#fbbf24', '#f87171'],
+                    borderWidth: 0
+                }]
+            },
+            options: chartOptions
+        });
+
+        // 2. Customer Activity Status
+        new Chart(document.getElementById('customerStatusChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Active', 'Non-Active'],
+                datasets: [{
+                    data: [82, 18],
+                    backgroundColor: ['#818cf8', '#64748b'],
+                    borderWidth: 0
+                }]
+            },
+            options: chartOptions
+        });
+
+        // 3. Complaint Status
+        new Chart(document.getElementById('complaintStatusChart'), {
+            type: 'pie',
+            data: {
+                labels: ['No Complaints', 'Complaints Raised'],
+                datasets: [{
+                    data: [92, 8],
+                    backgroundColor: ['#c084fc', '#f472b6'],
+                    borderWidth: 0
+                }]
+            },
+            options: chartOptions
+        });
+
+        // 4. Age Demographics
+        new Chart(document.getElementById('ageDemographicsChart'), {
+            type: 'pie',
+            data: {
+                labels: ['0-18', '19-25', '26-35', '36-50', '50+'],
+                datasets: [{
+                    data: [5, 15, 40, 30, 10],
+                    backgroundColor: ['#818cf8', '#c084fc', '#f472b6', '#34d399', '#fbbf24'],
+                    borderWidth: 0
+                }]
+            },
+            options: chartOptions
+        });
+    }
+
+    initDashboard();
 });

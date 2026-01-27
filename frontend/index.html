@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -189,6 +190,30 @@
                 </div>
 
                 <button class="reset-btn" id="resetBtn">Analyze Another Customer</button>
+            </div>
+
+            <div class="glass-card dashboard-section" id="dashboardSection">
+                <h2><i class="fa-solid fa-chart-pie"></i> Business Intelligence Dashboard</h2>
+                <p class="dashboard-subtitle">Visualizing Key Drivers of Customer Churn</p>
+
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Churn Risk Distribution</h3>
+                        <canvas id="churnDistributionChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Customer Activity Status</h3>
+                        <canvas id="customerStatusChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Complaint Frequency</h3>
+                        <canvas id="complaintStatusChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Age Demographics</h3>
+                        <canvas id="ageDemographicsChart"></canvas>
+                    </div>
+                </div>
             </div>
         </main>
 
