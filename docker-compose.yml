@@ -1,3 +1,5 @@
+version: '3.9'  # Optional, can be removed to avoid deprecation warnings
+
 services:
   # ---------------- MLflow ----------------
   mlflow:
@@ -7,20 +9,15 @@ services:
 
     volumes:
       - ./mlruns:/app/mlruns
-      - ./backend:/app/backend
+      - ./backend:/app/backend  # Optional for experimentation if needed
 
     ports:
       - "5000:5000"
 
     command: >
-      bash -c "
-      pip install mlflow &&
-      mlflow ui --host 0.0.0.0 --port 5000
-      --backend-store-uri file:///app/mlruns
-      "
+      bash -c "pip install mlflow && mlflow ui --host 0.0.0.0 --port 5000 --backend-store-uri file:///app/mlruns"
 
     restart: unless-stopped
-
 
   # ---------------- API ----------------
   churn-api:
@@ -36,9 +33,9 @@ services:
 
     volumes:
       - ./mlruns:/app/mlruns
-      - ./backend:/app/backend
       - ./training:/app/training
       - ./frontend:/app/frontend
+      # - ./backend:/app/backend  # Remove this line if you want Dockerfile copy to be used
 
     environment:
       WORKERS: 4
