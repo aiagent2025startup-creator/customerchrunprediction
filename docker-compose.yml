@@ -11,12 +11,12 @@ services:
     volumes:
       - ./training:/app/training
       - ./frontend:/app/frontend
-      # - ./backend:/app/backend  # <-- MUST mount backend
-      - ./mlruns:/app/mlruns    # optional if you want model logs inside API
+      - ./backend:/app/backend     # <-- mount backend
+      - ./mlruns:/app/mlruns
     environment:
       WORKERS: 4
       MLFLOW_TRACKING_URI: file:///app/mlruns
-      PYTHONPATH: /app           # <-- ensure Python finds backend
+      PYTHONPATH: /app/backend     # <-- point to backend
     depends_on:
       - mlflow
     restart: always
