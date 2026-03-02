@@ -11,7 +11,7 @@ services:
     volumes:
       - ./training:/app/training
       - ./frontend:/app/frontend
-      - ./backend:/app/backend  # <-- MUST mount backend
+      # - ./backend:/app/backend  # <-- MUST mount backend
       - ./mlruns:/app/mlruns    # optional if you want model logs inside API
     environment:
       WORKERS: 4
