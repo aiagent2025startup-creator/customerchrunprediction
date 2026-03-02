@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   churn-api:
     build:
@@ -9,11 +11,12 @@ services:
     volumes:
       - ./training:/app/training
       - ./frontend:/app/frontend
-      # Uncomment this only for dev hot reload:
-      # - ./backend:/app/backend
+      - ./backend:/app/backend  # <-- MUST mount backend
+      - ./mlruns:/app/mlruns    # optional if you want model logs inside API
     environment:
       WORKERS: 4
       MLFLOW_TRACKING_URI: file:///app/mlruns
+      PYTHONPATH: /app           # <-- ensure Python finds backend
     depends_on:
       - mlflow
     restart: always
