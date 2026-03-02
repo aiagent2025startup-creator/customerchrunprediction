@@ -1,54 +1,39 @@
-version: '3.9'  # Optional, can be removed to avoid deprecation warnings
-
 services:
-  # ---------------- MLflow ----------------
-  mlflow:
-    image: python:3.11-slim
-    container_name: mlflow-server
-    working_dir: /app
-
-    volumes:
-      - ./mlruns:/app/mlruns
-      - ./backend:/app/backend  # Optional for experimentation if needed
-
-    ports:
-      - "5000:5000"
-
-    command: >
-      bash -c "pip install mlflow && mlflow ui --host 0.0.0.0 --port 5000 --backend-store-uri file:///app/mlruns"
-
-    restart: unless-stopped
-
-  # ---------------- API ----------------
   churn-api:
     build:
       context: .
       dockerfile: backend/Dockerfile
-
     container_name: churn-api
-    image: churn-api:latest
-
     ports:
       - "8000:8000"
-
     volumes:
-      - ./mlruns:/app/mlruns
       - ./training:/app/training
       - ./frontend:/app/frontend
-      # - ./backend:/app/backend  # Remove this line if you want Dockerfile copy to be used
-
+      # Uncomment this only for dev hot reload:
+      # - ./backend:/app/backend
     environment:
       WORKERS: 4
       MLFLOW_TRACKING_URI: file:///app/mlruns
-
     depends_on:
       - mlflow
-
     restart: always
-
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 10s
+
+  mlflow:
+    image: python:3.11-slim
+    container_name: mlflow-server
+    working_dir: /app
+    volumes:
+      - ./mlruns:/app/mlruns
+      - ./backend:/app/backend
+    ports:
+      - "5000:5000"
+    command: >
+      bash -c "pip install mlflow &&
+               mlflow ui --host 0.0.0.0 --port 5000 --backend-store-uri file:///app/mlruns"
+    restart: unless-stopped
