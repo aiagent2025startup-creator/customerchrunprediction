@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1770357148074
+current_stage: None
+description: null
+last_updated_timestamp: 1770357148074
+name: ChurnPredictionModel
+run_id: 75fecc74a6ba4f389c8b0cb682aaa5b1
+run_link: null
+source: file:///home/thamaraikannan/Desktop/project1/mlruns/894712091902839965/75fecc74a6ba4f389c8b0cb682aaa5b1/artifacts/model
+status: READY
+status_message: null
+storage_location: file:///home/thamaraikannan/Desktop/project1/mlruns/894712091902839965/75fecc74a6ba4f389c8b0cb682aaa5b1/artifacts/model
+user_id: null
+version: 2

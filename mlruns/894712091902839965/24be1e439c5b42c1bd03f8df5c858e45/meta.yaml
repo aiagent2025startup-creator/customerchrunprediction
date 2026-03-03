@@ -1,0 +1,15 @@
+artifact_uri: file:///home/thamaraikannan/Desktop/project1/mlruns/894712091902839965/24be1e439c5b42c1bd03f8df5c858e45/artifacts
+end_time: 1770356914794
+entry_point_name: ''
+experiment_id: '894712091902839965'
+lifecycle_stage: active
+run_id: 24be1e439c5b42c1bd03f8df5c858e45
+run_name: secretive-midge-851
+run_uuid: 24be1e439c5b42c1bd03f8df5c858e45
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1770356914775
+status: 4
+tags: []
+user_id: Asus

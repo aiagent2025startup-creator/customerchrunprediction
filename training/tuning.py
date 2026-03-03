@@ -35,7 +35,7 @@ def optimize_hyperparameters(X, y, n_trials=20):
     study = optuna.create_study(direction='maximize')
     study.optimize(objective, n_trials=n_trials)
     
-    print(f"✅ Best trial: {study.best_trial.value}")
-    print(f"✅ Best params: {study.best_trial.params}")
+    print(f"Best trial: {study.best_trial.value}")
+    print(f"Best params: {study.best_trial.params}")
     
     return study.best_trial.params

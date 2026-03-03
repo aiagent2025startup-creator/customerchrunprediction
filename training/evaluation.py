@@ -17,15 +17,15 @@ def evaluate_model(model, X_test, y_test, threshold=0.5):
     roc_auc = roc_auc_score(y_test, y_pred_proba)
     f1 = f1_score(y_test, y_pred)
     
-    print(f"📊 Accuracy: {acc:.4f}")
-    print(f"📊 ROC-AUC: {roc_auc:.4f}")
-    print(f"📊 F1 Score: {f1:.4f}")
-    print("\n📝 Classification Report:")
+    print(f"Accuracy: {acc:.4f}")
+    print(f"ROC-AUC: {roc_auc:.4f}")
+    print(f"F1 Score: {f1:.4f}")
+    print("\nClassification Report:")
     print(classification_report(y_test, y_pred))
     
     # Confusion Matrix
     cm = confusion_matrix(y_test, y_pred)
-    print("\n🧱 Confusion Matrix:")
+    print("\nConfusion Matrix:")
     print(cm)
     
     # Log metrics to MLflow
@@ -51,5 +51,5 @@ def find_optimal_threshold(model, X_test, y_test):
     best_idx = np.argmax(f1_scores)
     best_threshold = thresholds[best_idx]
     
-    print(f"🎯 Optimal Threshold (max F1): {best_threshold:.4f}")
+    print(f"Optimal Threshold (max F1): {best_threshold:.4f}")
     return best_threshold

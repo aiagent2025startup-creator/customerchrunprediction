@@ -24,9 +24,9 @@ def train_model():
     
     with mlflow.start_run() as run:
         run_id = run.info.run_id
-        print(f"🚀 MLflow Run ID: {run_id}")
+        print(f"MLflow Run ID: {run_id}")
         
-        print("📦 Fetching UCI Iranian Churn dataset...")
+        print("Fetching UCI Iranian Churn dataset...")
         iranian_churn = fetch_ucirepo(id=563)
         
         X = iranian_churn.data.features
@@ -36,16 +36,16 @@ def train_model():
             y = y.iloc[:, 0]
 
         dataset_size = X.shape[0]
-        print(f"✅ Dataset loaded: {dataset_size} rows, {X.shape[1]} features")
+        print(f"Dataset loaded: {dataset_size} rows, {X.shape[1]} features")
         
         # Log dataset info
         mlflow.log_param("dataset_size", dataset_size)
         mlflow.log_param("original_features", X.shape[1])
         
         # 1. Feature Engineering
-        print("🛠️ Applying feature engineering...")
+        print("Applying feature engineering...")
         X_processed = preprocess_data(X)
-        print(f"✅ Features processed: {X_processed.shape[1]} features")
+        print(f"Features processed: {X_processed.shape[1]} features")
         mlflow.log_param("processed_features", X_processed.shape[1])
         
         # Split data
@@ -56,17 +56,17 @@ def train_model():
         mlflow.log_param("test_size", len(X_test))
         
         # 2. Hyperparameter Tuning
-        print("🔍 Optimizing hyperparameters with Optuna...")
+        print("Optimizing hyperparameters with Optuna...")
         best_params = optimize_hyperparameters(X_train, y_train, n_trials=20)
         mlflow.log_params(best_params)
         
         # 3. Train Final Model
-        print("🏋️ Training final model...")
+        print("Training final model...")
         model = LGBMClassifier(**best_params)
         model.fit(X_train, y_train)
         
         # 4. Evaluation
-        print("📊 Evaluating model...")
+        print("Evaluating model...")
         best_threshold = find_optimal_threshold(model, X_test, y_test)
         mlflow.log_param("optimal_threshold", best_threshold)
         
@@ -78,11 +78,11 @@ def train_model():
         mlflow.log_metric("f1_score", metrics["f1"])
         
         # 5. Explainability (SHAP)
-        print("🧠 Generating SHAP explainer...")
+        print("Generating SHAP explainer...")
         explainer = shap.TreeExplainer(model)
         
         # 6. Save Local Artifacts (fallback)
-        print("💾 Saving local artifacts to backend/...")
+        print("Saving local artifacts to backend/...")
         os.makedirs('backend', exist_ok=True)
         
         joblib.dump(model, 'backend/churn_model.pkl')
@@ -106,7 +106,7 @@ def train_model():
         mlflow.log_artifact('backend/model_metadata.pkl')
         
         # 8. Register Model in MLflow Model Registry
-        print("📝 Registering model in MLflow Model Registry...")
+        print("Registering model in MLflow Model Registry...")
         model_uri = f"runs:/{run_id}/model"
         
         # Log the LightGBM model with MLflow
@@ -116,10 +116,10 @@ def train_model():
             registered_model_name=MLFLOW_MODEL_NAME
         )
         
-        print(f"✅ Model registered as '{MLFLOW_MODEL_NAME}'")
-        print(f"✅ MLflow Run ID: {run_id}")
-        print("✅ All artifacts saved successfully.")
-        print("\n📋 Next Steps:")
+        print(f"Model registered as '{MLFLOW_MODEL_NAME}'")
+        print(f"MLflow Run ID: {run_id}")
+        print("All artifacts saved successfully.")
+        print("\nNext Steps:")
         print("   1. Start MLflow UI: mlflow ui --port 5000")
         print(f"   2. Promote model to 'Production' stage in the UI")
         print("   3. Restart FastAPI to load the production model")
