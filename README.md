@@ -1,22 +1,31 @@
 # ChurnGuard AI - Production Customer Intelligence System
 
-ChurnGuard AI is an end-to-end, high-performance customer churn prediction platform. It leverages **LightGBM** and **FastAPI** to provide real-time risk assessments, actionable insights, and a comprehensive Business Intelligence dashboard with interactive visualizations.
+ChurnGuard AI is an end-to-end, high-performance customer churn prediction platform. It leverages **LightGBM** and **FastAPI** to provide real-time risk assessments and explainable churn factors with enterprise-level stability.
 
 ![System Showcase](https://img.shields.io/badge/Status-Production--Ready-success?style=for-the-badge) ![Tech-FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi) ![Tech-JS](https://img.shields.io/badge/Frontend-Vanilla%20JS-F7DF1E?style=for-the-badge&logo=javascript)
 
 ## 🚀 Key Features
 
-- **Predictive Intelligence**: State-of-the-art LightGBM model trained on behavioral datasets.
-- **Explainable AI (XAI)**: Integrated SHAP analysis to explain *why* a customer is at risk.
-- **Premium UI**: Glassmorphism interface with smooth transitions and layout stability.
-- **Production-ready API**: Optimized endpoints with sub-100ms inference times.
+- **Predictive Intelligence**: High-precision LightGBM model with **97.6% Accuracy**.
+- **Explainable AI (XAI)**: SHAP-powered risk factors explaining every prediction.
+- **Micro-interactions**: Premium Glassmorphism UI with smooth, stable transitions.
+- **Production API**: Sub-100ms inference times via optimized FastAPI endpoints.
 
-## 🛠️ Tech Stack
+## � Model Attributes (13 Features)
+
+The AI engine analyzes the following customer dimensions:
+- **Usage Patterns**: Seconds of Use, Frequency of Use, SMS Frequency.
+- **Engagement**: Subscription Length, Distinct Called Numbers.
+- **Service Quality**: Call Failures, Customer Complaints.
+- **Demographics**: Age, Age Group (Categorical).
+- **Financials**: Charge Amount, Customer Value.
+- **Account Status**: Tariff Plan, Current Status.
+
+## �🛠️ Tech Stack
 
 - **Backend**: Python 3.9+, FastAPI, Pydantic v2
 - **ML Engine**: LightGBM, Scikit-learn, Pandas, SHAP
 - **Frontend**: Vanilla HTML5, CSS3 (Glassmorphism), JavaScript (ES6+)
-- **Charts**: Chart.js 4.x
 - **Monitoring**: MLflow (Tracking & Registry)
 
 ## 📂 Folder Structure
