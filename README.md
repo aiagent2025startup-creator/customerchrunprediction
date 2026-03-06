@@ -101,4 +101,4 @@ Access the application at: **[http://localhost:8001](http://localhost:8001)**
 
 ## 👤 Author
 **Senior Development Team**
-*Technical Leader: Antigravity AI*
+*Technical Leader*
