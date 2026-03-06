@@ -4,16 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Churn Prediction AI</title>
+    <meta name="description"
+        content="ChurnGuard AI – Advanced customer churn prediction powered by LightGBM and FastAPI. Predict, analyze, and retain customers with machine learning.">
+    <title>ChurnGuard AI – Customer Churn Prediction</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
+    <!-- Animated background blobs -->
     <div class="background-blobs">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
@@ -21,17 +25,51 @@
     </div>
 
     <div class="container">
+        <!-- ── Header ── -->
         <header>
             <div class="logo">
                 <i class="fa-solid fa-chart-line"></i>
                 <h1>ChurnGuard AI</h1>
             </div>
-            <p class="subtitle">Advanced Customer Retention Intelligence</p>
+            <p class="subtitle">Advanced Customer Retention Intelligence &bull; Powered by LightGBM & FastAPI</p>
         </header>
 
         <main>
+            <!-- ── Model Stats Row ── -->
+            <div class="stats-row" id="statsRow">
+                <div class="stat-card" id="statAccuracy">
+                    <i class="fa-solid fa-bullseye"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statAccuracyVal">—</span>
+                        <span class="stat-label">Model Accuracy</span>
+                    </div>
+                </div>
+                <div class="stat-card" id="statF1">
+                    <i class="fa-solid fa-trophy"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statF1Val">—</span>
+                        <span class="stat-label">F1 Score</span>
+                    </div>
+                </div>
+                <div class="stat-card" id="statAUC">
+                    <i class="fa-solid fa-chart-area"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statAUCVal">—</span>
+                        <span class="stat-label">ROC-AUC Score</span>
+                    </div>
+                </div>
+                <div class="stat-card" id="statFeatures">
+                    <i class="fa-solid fa-list-check"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statFeaturesVal">—</span>
+                        <span class="stat-label">Features Used</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Prediction Form ── -->
             <div class="glass-card form-section">
-                <h2><i class="fa-solid fa-user-gear"></i> Customer Profile</h2>
+                <h2><i class="fa-solid fa-user-gear"></i> Customer Profile Input</h2>
                 <form id="predictionForm">
                     <div class="grid-container">
                         <!-- Personal Info -->
@@ -43,12 +81,12 @@
                         <div class="input-group">
                             <label for="Age_Group"><i class="fa-solid fa-users"></i> Age Group</label>
                             <select id="Age_Group" name="Age_Group" required>
-                                <option value="" disabled selected>Select Age Group...</option>
-                                <option value="1">1 (0–18)</option>
-                                <option value="2">2 (19–25)</option>
-                                <option value="3">3 (26–35)</option>
-                                <option value="4">4 (36–50)</option>
-                                <option value="5">5 (50+)</option>
+                                <option value="" disabled selected>Select Age Group…</option>
+                                <option value="1">1 – Young (0–18)</option>
+                                <option value="2">2 – Youth (19–25)</option>
+                                <option value="3">3 – Adult (26–35)</option>
+                                <option value="4">4 – Mid-Age (36–50)</option>
+                                <option value="5">5 – Senior (50+)</option>
                             </select>
                             <span class="error-text" id="Age_Group_error"></span>
                         </div>
@@ -100,8 +138,8 @@
                             <label for="Charge_Amount"><i class="fa-solid fa-file-invoice-dollar"></i> Charge
                                 Amount</label>
                             <select id="Charge_Amount" name="Charge_Amount" required>
-                                <option value="" disabled selected>Select Charge Amount...</option>
-                                <option value="0">0</option>
+                                <option value="" disabled selected>Select Charge Amount…</option>
+                                <option value="0">0 – Lowest</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -110,7 +148,7 @@
                                 <option value="6">6</option>
                                 <option value="7">7</option>
                                 <option value="8">8</option>
-                                <option value="9">9</option>
+                                <option value="9">9 – Highest</option>
                             </select>
                             <span class="error-text" id="Charge_Amount_error"></span>
                         </div>
@@ -123,25 +161,26 @@
                         <div class="input-group">
                             <label for="Tariff_Plan"><i class="fa-solid fa-sim-card"></i> Tariff Plan</label>
                             <select id="Tariff_Plan" name="Tariff_Plan" required>
-                                <option value="" disabled selected>Select Tariff Plan...</option>
+                                <option value="" disabled selected>Select Tariff Plan…</option>
                                 <option value="1">Pay as you go</option>
                                 <option value="2">Contractual</option>
                             </select>
                             <span class="error-text" id="Tariff_Plan_error"></span>
                         </div>
                         <div class="input-group">
-                            <label for="Status"><i class="fa-solid fa-toggle-on"></i> Status</label>
+                            <label for="Status"><i class="fa-solid fa-toggle-on"></i> Account Status</label>
                             <select id="Status" name="Status" required>
-                                <option value="" disabled selected>Select Status...</option>
+                                <option value="" disabled selected>Select Status…</option>
                                 <option value="1">Active</option>
                                 <option value="2">Non-active</option>
                             </select>
                             <span class="error-text" id="Status_error"></span>
                         </div>
                         <div class="input-group">
-                            <label for="Complains"><i class="fa-solid fa-circle-exclamation"></i> Complains</label>
+                            <label for="Complains"><i class="fa-solid fa-circle-exclamation"></i> Complaint
+                                Status</label>
                             <select id="Complains" name="Complains" required>
-                                <option value="" disabled selected>Select Complaint Status...</option>
+                                <option value="" disabled selected>Select Complaint Status…</option>
                                 <option value="0">No Complaint</option>
                                 <option value="1">Complaint Raised</option>
                             </select>
@@ -149,16 +188,17 @@
                         </div>
                     </div>
 
-                    <button type="submit" id="predictBtn">
-                        <span class="btn-text">Analyze Risk</span>
+                    <button type="submit" id="predictBtn" disabled>
+                        <span class="btn-text">Analyze Churn Risk</span>
                         <i class="fa-solid fa-arrow-right"></i>
                         <div class="loader" id="btnLoader"></div>
                     </button>
                 </form>
             </div>
 
+            <!-- ── Result Section ── -->
             <div class="glass-card result-section hidden" id="resultSection">
-                <h2><i class="fa-solid fa-square-poll-vertical"></i> Analysis Result</h2>
+                <h2><i class="fa-solid fa-square-poll-vertical"></i> Prediction Result</h2>
 
                 <div class="result-card" id="resultCard">
                     <div class="risk-indicator">
@@ -174,14 +214,24 @@
                             <span class="value" id="predictionText">Non-Churn</span>
                         </div>
                         <div class="detail-item">
-                            <span class="label">Confidence:</span>
-                            <span class="value" id="confidenceText">98.5%</span>
+                            <span class="label">Churn Probability:</span>
+                            <span class="value" id="probabilityText">—</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Model Confidence:</span>
+                            <span class="value" id="confidenceText">—</span>
                         </div>
                         <div class="detail-item">
                             <span class="label">Processing Time:</span>
-                            <span class="value" id="latencyText">12ms</span>
+                            <span class="value" id="latencyText">—</span>
                         </div>
                     </div>
+                </div>
+
+                <!-- Risk Factors -->
+                <div class="risk-factors-section" id="riskFactorsSection" style="display:none;">
+                    <h3><i class="fa-solid fa-triangle-exclamation"></i> Top Risk Factors</h3>
+                    <ul class="risk-factors-list" id="riskFactorsList"></ul>
                 </div>
 
                 <div class="action-recommendation" id="recommendation">
@@ -189,39 +239,18 @@
                     <p id="recommendationText">Customer is satisfied. No immediate action required.</p>
                 </div>
 
-                <button class="reset-btn" id="resetBtn">Analyze Another Customer</button>
+                <button class="reset-btn" id="resetBtn">
+                    <i class="fa-solid fa-rotate-left"></i> Analyze Another Customer
+                </button>
             </div>
 
-            <div class="glass-card dashboard-section" id="dashboardSection">
-                <h2><i class="fa-solid fa-chart-pie"></i> Business Intelligence Dashboard</h2>
-                <p class="dashboard-subtitle">Visualizing Key Drivers of Customer Churn</p>
-
-                <div class="charts-grid">
-                    <div class="chart-container">
-                        <h3>Churn Risk Distribution</h3>
-                        <canvas id="churnDistributionChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h3>Customer Activity Status</h3>
-                        <canvas id="customerStatusChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h3>Complaint Frequency</h3>
-                        <canvas id="complaintStatusChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h3>Age Demographics</h3>
-                        <canvas id="ageDemographicsChart"></canvas>
-                    </div>
-                </div>
-            </div>
         </main>
 
         <footer>
-            <p>&copy; 2024 ChurnGuard AI. Powered by LightGBM & FastAPI.</p>
+            <p>&copy; 2024 ChurnGuard AI. Powered by LightGBM &amp; FastAPI.</p>
             <div class="status-indicator">
-                <span class="status-dot"></span>
-                <span id="apiStatus">System Online</span>
+                <span class="status-dot" id="statusDot"></span>
+                <span id="apiStatus">Checking…</span>
             </div>
         </footer>
     </div>

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field
 from typing import List, Optional
 from enum import IntEnum
 
@@ -63,7 +63,7 @@ class PredictionResponse(BaseModel):
     top_risk_factors: List[dict] = Field(default=[], description="Top contributing features to churn risk")
 
 class BatchPredictionRequest(BaseModel):
-    customers: List[CustomerData] = Field(..., min_items=1, max_items=100, description="List of customer data (1-100 items)")
+    customers: List[CustomerData] = Field(..., min_length=1, max_length=100, description="List of customer data (1-100 items)")
 
 class BatchPredictionResponse(BaseModel):
     predictions: List[PredictionResponse]
@@ -72,6 +72,7 @@ class BatchPredictionResponse(BaseModel):
     processing_time_ms: float
 
 class HealthResponse(BaseModel):
+    model_config = {'protected_namespaces': ()}
     status: str
     model_loaded: bool
     model_accuracy: float

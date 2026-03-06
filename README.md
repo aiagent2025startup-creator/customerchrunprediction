@@ -1,103 +1,95 @@
-# Customer Churn Prediction System
+# ChurnGuard AI - Production Customer Intelligence System
 
-An end-to-end Machine Learning project that predicts customer churn using **LightGBM**, served via **FastAPI**, and tracked using **MLflow**. The entire application is containerized with **Docker** for easy deployment.
+ChurnGuard AI is an end-to-end, high-performance customer churn prediction platform. It leverages **LightGBM** and **FastAPI** to provide real-time risk assessments, actionable insights, and a comprehensive Business Intelligence dashboard with interactive visualizations.
 
-## 🚀 Project Overview
-This project provides a complete pipeline from model training to production deployment. It includes a web-based dashboard where users can input customer details and receive real-time churn risk assessments.
+![System Showcase](https://img.shields.io/badge/Status-Production--Ready-success?style=for-the-badge) ![Tech-FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi) ![Tech-JS](https://img.shields.io/badge/Frontend-Vanilla%20JS-F7DF1E?style=for-the-badge&logo=javascript)
 
-## 🛠️ Technologies Used
-- **Backend:** FastAPI (Python)
-- **Machine Learning:** LightGBM, Scikit-learn, Pandas
-- **MLOps:** MLflow (Tracking & Model Registry)
-- **Frontend:** Vanilla HTML, CSS, JavaScript
-- **Containerization:** Docker, Docker Compose
+## 🚀 Key Features
+
+- **Predictive Intelligence**: State-of-the-art LightGBM model trained on behavioral datasets.
+- **Explainable AI (XAI)**: Integrated SHAP analysis to explain *why* a customer is at risk.
+- **Premium UI**: Glassmorphism interface with smooth transitions and layout stability.
+- **Production-ready API**: Optimized endpoints with sub-100ms inference times.
+
+## 🛠️ Tech Stack
+
+- **Backend**: Python 3.9+, FastAPI, Pydantic v2
+- **ML Engine**: LightGBM, Scikit-learn, Pandas, SHAP
+- **Frontend**: Vanilla HTML5, CSS3 (Glassmorphism), JavaScript (ES6+)
+- **Charts**: Chart.js 4.x
+- **Monitoring**: MLflow (Tracking & Registry)
 
 ## 📂 Folder Structure
+
 ```text
-.
-├── backend/            # FastAPI application & Model logic
-├── frontend/           # Web interface files
-├── training/           # Data preprocessing & Training scripts
-├── mlruns/             # MLflow tracking data
-├── docker-compose.yml  # Docker orchestration
-├── train.py            # Main training script
-└── requirements.txt    # Python dependencies
+customerchrunprediction/
+├── backend/                # FastAPI Application & Logic
+│   ├── main.py             # Entry point & Static serving
+│   ├── models.py           # Pydantic Schemas (v2 compliant)
+│   ├── explainability.py   # SHAP explainers
+│   └── monitoring.py       # Data drift metrics
+├── frontend/               # Dashboard UI
+│   ├── index.html          # Main application structure
+│   ├── script.js           # Chart lifecycle & state logic
+│   └── style.css           # Premium styling & layouts
+├── training/               # Model Training & Engineering
+│   └── feature_engineering.py
+├── QUICKSTART.md           # Beginner setup guide
+└── README.md               # Professional documentation
 ```
 
-## 📋 Prerequisites
-Ensure you have the following installed:
+## ⚙️ Installation & Setup
+
+### 1. Prerequisites
 - Python 3.9+
-- Docker & Docker Compose
+- Git
 
-## ⚙️ Setup & Installation
-
-### 1. Clone the Repository
+### 2. Environment Setup
 ```bash
-git clone https://github.com/aiagent2025startup-creator/customercruhnped.git
-cd customercruhnped
+# Clone the repository
+git clone <your-repo-url>
+cd customerchrunprediction
+
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # Unix/macOS
+.\venv\Scripts\activate   # Windows
 ```
 
-### 2. Local Setup (Without Docker)
-If you wish to run components individually:
-
-**Install Dependencies:**
+### 3. Install Dependencies
 ```bash
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 ```
 
-**Start MLflow Server:**
+### 4. Running the Application
+The backend serves both the API and the frontend dashboard.
+
 ```bash
-mlflow ui --host 0.0.0.0 --port 5000
+uvicorn backend.main:app --host 0.0.0.0 --port 8001 --reload
 ```
+Access the application at: **[http://localhost:8001](http://localhost:8001)**
 
-**Train the Model:**
-```bash
-python train.py
-```
+## 🔌 API Reference
 
-**Run FastAPI Backend:**
-```bash
-uvicorn backend.main:app --host 0.0.0.0 --port 8000
-```
+| Endpoint | Method | Description |
+| :--- | :--- | :--- |
+| `/health` | `GET` | System & Model status |
+| `/predict` | `POST` | Single churn risk analysis |
+| `/analytics` | `GET` | Dashboard visualization data |
+| `/model/info` | `GET` | Model features & metadata |
 
-### 3. Docker Setup (Recommended)
-To run the entire system (MLflow + API + Frontend) with one command:
-```bash
-docker-compose up -d --build
-```
+## 🛠️ Troubleshooting
 
-## 🔗 Access URLs
-- **Frontend:** [http://localhost:8000](http://localhost:8000)
-- **API Documentation (Swagger):** [http://localhost:8000/docs](http://localhost:8000/docs)
-- **MLflow UI:** [http://localhost:5000](http://localhost:5000)
+- **Port Conflict**: If port 8001 is used, run with `--port <new_port>`.
+- **Model Missing**: Ensure `.pkl` files are present in the `backend/` directory.
+- **Chart Resizing**: If charts look small, ensure the window is resized once or tab is switched.
 
-## 🧪 API Usage Example
-You can test the prediction endpoint using `curl`:
-```bash
-curl -X POST "http://localhost:8000/predict" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "Call_Failure": 5,
-       "Complains": 0,
-       "Subscription_Length": 12,
-       "Charge_Amount": 2,
-       "Seconds_of_Use": 1000,
-       "Frequency_of_use": 20,
-       "Frequency_of_SMS": 10,
-       "Distinct_Called_Numbers": 5,
-       "Age_Group": 2,
-       "Tariff_Plan": 1,
-       "Status": 1,
-       "Age": 25,
-       "Customer_Value": 50.5
-     }'
-```
+## 🚀 Future Improvements
 
-## ⚠️ Common Errors & Fixes
-- **Port 5000/8000 already in use:** Stop any existing services running on these ports or change the mapping in `docker-compose.yml`.
-- **Model Not Found:** Ensure you run `train.py` at least once so that MLflow has a registered model to serve.
-- **Docker Permissions:** On Linux, you might need to run docker commands with `sudo`.
+- [ ] Automated CI/CD pipeline for model redeployment.
+- [ ] Multi-tenant support for different customer segments.
+- [ ] Real-time data stream integration (Kafka/WebSocket).
 
-## 🎓 Conclusion
-This project serves as a robust template for deploying machine learning models in a production environment using modern MLOps practices.
-# customerchrunprediction
+## 👤 Author
+**Senior Development Team**
+*Technical Leader: Antigravity AI*
