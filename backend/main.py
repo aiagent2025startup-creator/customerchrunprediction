@@ -27,8 +27,12 @@ from training.feature_engineering import preprocess_data
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Paths and Configuration
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(BASE_DIR)
+
 # MLflow Configuration
-MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "file:./mlruns")
+MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", f"file:{os.path.join(PROJECT_ROOT, 'mlruns')}")
 MLFLOW_MODEL_NAME = "ChurnPredictionModel"
 
 # Global variables for model artifacts
@@ -43,6 +47,7 @@ def load_model_from_mlflow():
     global model, model_source, model_version
     try:
         mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+        logger.info(f"Checking MLflow at: {MLFLOW_TRACKING_URI}")
         
         # Try to load the Production stage model
         model_uri = f"models:/{MLFLOW_MODEL_NAME}/Production"
@@ -60,6 +65,8 @@ def load_model_from_mlflow():
             model_source = "mlflow"
             logger.info(f"✅ Loaded MLflow model v{model_version} from Production stage")
             return True
+        else:
+            logger.warning(f"⚠️ No Production version found for {MLFLOW_MODEL_NAME}")
     except Exception as e:
         logger.warning(f"⚠️ Could not load from MLflow Registry: {e}")
     return False
@@ -68,9 +75,11 @@ def load_model_from_local():
     """Load model from local pickle file (fallback)."""
     global model, feature_names, model_metadata, model_source, model_version
     try:
-        model_path = "backend/churn_model.pkl"
-        features_path = "backend/feature_names.pkl"
-        metadata_path = "backend/model_metadata.pkl"
+        model_path = os.path.join(BASE_DIR, "churn_model.pkl")
+        features_path = os.path.join(BASE_DIR, "feature_names.pkl")
+        metadata_path = os.path.join(BASE_DIR, "model_metadata.pkl")
+        
+        logger.info(f"Checking local model at: {model_path}")
         
         if os.path.exists(model_path):
             model = joblib.load(model_path)
@@ -78,8 +87,10 @@ def load_model_from_local():
             model_metadata = joblib.load(metadata_path)
             model_source = "local"
             model_version = model_metadata.get("run_id", "unknown")[:8] if model_metadata else "unknown"
-            logger.info("✅ Loaded model from local files (fallback)")
+            logger.info(f"✅ Successfully loaded model from {model_path}")
             return True
+        else:
+            logger.error(f"❌ Local model file not found at: {model_path}")
     except Exception as e:
         logger.error(f"❌ Error loading local model: {e}")
     return False
@@ -96,8 +107,8 @@ async def lifespan(app: FastAPI):
         load_model_from_local()
     else:
         # Even if MLflow model loaded, load feature names and metadata from local
-        features_path = "backend/feature_names.pkl"
-        metadata_path = "backend/model_metadata.pkl"
+        features_path = os.path.join(BASE_DIR, "feature_names.pkl")
+        metadata_path = os.path.join(BASE_DIR, "model_metadata.pkl")
         if os.path.exists(features_path):
             feature_names = joblib.load(features_path)
         if os.path.exists(metadata_path):
@@ -132,7 +143,8 @@ app.add_middleware(
 )
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
+FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
+app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
@@ -155,7 +167,8 @@ def get_risk_level(prob: float) -> str:
 
 @app.get("/", tags=["Root"])
 async def root():
-    return FileResponse('frontend/index.html')
+    index_path = os.path.join(FRONTEND_DIR, "index.html")
+    return FileResponse(index_path)
 
 @app.get("/health", response_model=HealthResponse, tags=["Health"])
 async def health_check():

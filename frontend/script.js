@@ -1,3 +1,4 @@
+
 const API_URL = window.location.origin;
 
 // State to keep track of chart instances
@@ -16,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initializations
     checkHealth();
-    fetchAnalytics();
 
     // Validation
     const inputs = form.querySelectorAll('input, select');
